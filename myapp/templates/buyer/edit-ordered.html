@@ -1,0 +1,87 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block title %}
+<title>Edit-Order</title>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="checkout-area pt-60 pb-30">
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-lg-6 col-12">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="checkbox-form">
+                        <h3>My order</h3>
+                        {% for msg in messages %}
+                        <p style="color: red;">{{msg}}</p>
+                        {% endfor %}
+                        <div class="row">
+                            <div class="col-md-12">
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Quantity</label>
+                                    {{form.quantity}}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>payment method</label>
+                                    {{form.payment_method}}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Address <span class="required"></span></label>
+                                    {{form.addres}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-button-payment">
+                        <button class="register-button mt-0">Update</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6 col-12">
+                <div class="your-order">
+                    <h3>Your order</h3>
+                    <div class="your-order-table table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="cart-product-name">Product</th>
+                                    <th class="cart-product-total">Quantity</th>
+                                    <th class="cart-product-total">Price</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="cart_item">
+                                  <td class="cart-product-name">{{pro.product.product_name}}</td>
+                                  <td class="cart-product-name">{{pro.quantity}}</td>
+                                  <td class="cart-product-total"><span class="amount">RS {{pro.total_amount}}</span></td>  
+                                </tr>
+                            </tbody>
+                        </table>
+                        Price per item: Rs {{pro.product.price}}
+                    </div>
+                    <div class="payment-method">
+                        <div class="payment-accordion">
+                            <div id="accordion">
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

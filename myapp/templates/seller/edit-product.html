@@ -1,0 +1,61 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block title %}
+<title>Edit-product</title>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="page-section mb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-xs-12 col-lg-6 mb-30">
+                <a href="#"><img src="{{pro.pic.url}}" alt=""width="400" height="400"></a></td>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+                {% for msg in messages %}
+                <p style="color: red;">{{msg}}</p>
+                {% endfor %}
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="login-form">
+                        <h4 class="login-title">Edit-Product</h4>
+                        <div class="row">
+                            <div class="col-md-6 col-12 mb-20">
+                                <label>Product Name</label>
+                                {{form.product_name}}
+                            </div>
+                            <div class="col-md-6 col-12 mb-20">
+                                <label>Category</label>
+                                {{form.category}}
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>Quantity</label>
+                                {{form.quantity}}
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>Price per item</label>
+                                {{form.price}}
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>product Picture</label>
+                                {{form.pic}}
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>Description</label>
+                                {{form.description}}
+                            </div>   
+                            <div class="col-12">
+                                <button class="register-button mt-0">Update-Product</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

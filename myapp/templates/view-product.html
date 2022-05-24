@@ -1,0 +1,103 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block title %}
+<title>Home</title>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="content-wraper">
+    <div class="container">
+        <div class="row single-product-area">
+            <div class="col-lg-5 col-md-6">
+               <!-- Product Details Left -->
+                <div class="product-details-left">
+                    <div class="product-details-images slider-navigation-1">
+                        <div class="lg-image">
+                            <a>
+                                <img src="{{pro.pic.url}}" alt="product image width="350" height="350"">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!--// Product Details Left -->
+            </div>
+
+            <div class="col-lg-7 col-md-6">
+                <div class="product-details-view-content pt-60">
+                    <div class="product-info">
+                        {% for msg in messages %}
+                        <p style="color: red;">{{msg}}</p>
+                        {% endfor %}
+                        <h2>product Name:{{pro.product_name}}</h2>
+                        <span class="product-details-ref">Category:{{pro.category}}</span>
+                        <div class="rating-box pt-20">
+                        </div>
+                        <div class="price-box pt-20">
+                            <span class="new-price new-price-2">Price:Rs {{pro.price}}/-</span>
+                        </div>
+                        <div class="product-desc">
+                            <p>
+                                <span>Avalible_Quantity: {{pro.quantity}}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="product-desc">
+                            <p>
+                                <span>{{pro.description}}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="product-variants">
+                            <div class="produt-variants-size">
+                                <label>Seller</label>
+                                {{pro.seller.first_name}} {{pro.seller.last_name}}
+                            </div>
+                        </div>
+                        <div class="single-add-to-cart">
+                            <form action="{% url 'add-to-cart' pro.id%}" method="POST" class="cart-quantity">
+                                {% csrf_token %}
+                                <div class="quantity">
+                                    <label>Quantity</label>
+                                    <div class="cart-plus-minus">
+                                        <input class="cart-plus-minus-box" value="1" name='quantity'>
+                                        <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
+                                        <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
+                                    </div>
+                                </div>
+                                <button class="add-to-cart" type="submit">Add to cart</button>
+                            </form>
+                        </div>
+                        <div class="product-additional-info pt-25">
+                            <a href="{% url 'buy-now' pro.id%}" class="btn btn-primary">Buy-Now</a>
+                        </div>
+                        <div class="block-reassurance">
+                            <ul>
+                                <li>
+                                    <div class="reassurance-item">
+                                        <div class="reassurance-icon">
+                                            <i class="fa fa-truck"></i>
+                                        </div>
+                                        <p>Delivery policy (7 day Delivery)</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="reassurance-item">
+                                        <div class="reassurance-icon">
+                                            <i class="fa fa-exchange"></i>
+                                        </div>
+                                        <p> Return policy (7 day Return)</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+{% endblock %}

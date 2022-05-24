@@ -1,0 +1,102 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block title %}
+<title>view-ordered</title>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="checkout-area pt-60 pb-30">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-12">
+                <form action="#">
+                    <div class="checkbox-form">
+                        <h3>order Details</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Buyer Username <span class="required"></span></label>
+                                    <input placeholder="" disabled type="text" value="{{pro.user.username}}">      
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>First Name <span class="required"></span></label>
+                                    <input placeholder="" disabled type="text" value="{{pro.user.first_name}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Last Name <span class="required"></span></label>
+                                    <input placeholder="" disabled type="text" value="{{pro.user.last_name}}">
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Address</label>
+                                    <input placeholder="" type="text" disabled value="{{pro.addres}}">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Status<span class="required"></span></label>
+                                    <input placeholder="Street address" disabled type="text" value="{{pro.status}}">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Payment Method<span class="required"></span></label>
+                                    <input type="text"disabled value="{{pro.payment_method}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Amount<span class="required"></span></label>
+                                    <input placeholder="" disabled type="text" value="Rs {{pro.total_amount}}/-">
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>odered date<span class="required"></span></label>
+                                    <input placeholder="" type="text" value="{{pro.ordered_date}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6 col-12">
+                <div class="your-order">
+                    <h3>Order</h3>
+                    <div class="your-order-table table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="cart-product-name">Product</th>
+                                    <th class="cart-product-total">Quantity</th>
+                                    <th class="cart-product-total">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="cart_item">
+                                  <td class="cart-product-name">{{pro.product.product_name}}<strong class="product-quantity"></strong></td>
+                                  <td class="cart-product-total"><span class="amount">{{pro.quantity}}</span></td> 
+                                  <td class="cart-product-total"><span class="amount">{{pro.total_amount}}</span></td>  
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block title %}
+<title>Profile</title>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+        </div>
+    </div>
+</div>
+<!-- Li's Breadcrumb Area End Here -->
+<!-- Begin Login Content Area -->
+<div class="page-section mb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+                {% for msg in messages %}
+                <p style="color: red;">{{msg}}</p>
+                {% endfor %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="login-form">
+                        <h4 class="login-title">Edit-Profile</h4>
+                        <div class="row">
+                            <div class="col-md-6 col-12 mb-20">
+                                <label>First Name</label>
+                                {{form.first_name}}
+                            </div>
+                            <div class="col-md-6 col-12 mb-20">
+                                <label>Last Name</label>
+                                {{form.last_name}}
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>Email Address</label>
+                                {{form.email}}
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>Username</label>
+                                {{form.username}}
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>Mobile</label>
+                                {{form.mobile}}
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>Role</label>
+                                {{form.role}}
+                            </div>
+                        <div>    
+                        </div>    
+                            <div class="col-12">
+                                <a class="nav-item nav-link" href="{% url 'change-password' %}">Change Password</a>
+                                <button class="register-button mt-0">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

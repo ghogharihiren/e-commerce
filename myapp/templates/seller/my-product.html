@@ -1,0 +1,51 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block title %}
+<title>My-product</title>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="wishlist-area pt-60 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form action="#">
+                    <div class="table-content table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="li-product-remove">name</th>
+                                    <th class="li-product-thumbnail">images</th>
+                                    <th class="cart-product-name">Category</th>
+                                    <th class="li-product-price">Price pre item</th>
+                                    <th class="li-product-stock-status">Quantity</th>
+                                    <th class="li-product-add-cart">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pro in pro %}
+                                <tr>
+                                    <td ><span class="amount">{{pro.product_name}}</span></td>
+                                    <td class="li-product-thumbnail"><a href="#"><img src="{{pro.pic.url}}" alt=""width="50" height="50"></a></td>
+                                    <td ><span class="amount">{{pro.category}}</span></td>
+                                    <td ><span class="amount">{{pro.price}}</span></td>
+                                    <td ><span class="amount">{{pro.quantity}}</span></td>
+                                    <td class="li-product-add-cart"><a href="{% url 'edit-product' pro.id%}">Edit</a> 
+                                        <a href="{% url 'delete-product' pro.id %}">Delete</a> 
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

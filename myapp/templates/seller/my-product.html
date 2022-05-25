@@ -16,9 +16,13 @@
                 {% if pro %}
                 <form action="#">
                     <div class="table-content table-responsive">
-                        {% for msg in messages %}
-                        <p style="color: red;">{{msg}}</p>
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
                         {% endfor %}
+                        {% endif %}
                         <table class="table">
                             <thead>
                                 <tr>

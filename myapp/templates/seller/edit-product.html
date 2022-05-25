@@ -15,9 +15,13 @@
                 <a href="#"><img src="{{pro.pic.url}}" alt=""width="400" height="400"></a></td>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
-                {% for msg in messages %}
-                <p style="color: red;">{{msg}}</p>
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
                 {% endfor %}
+                {% endif %}
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="login-form">

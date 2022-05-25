@@ -40,11 +40,11 @@ def user_login(request):
                     login(request,user)
                     return redirect('index')     
                 else:
-                    messages.info(request,'Enter correct username or password')
+                    messages.warning(request,'Enter correct username or password')
                     return render(request,'login.html',{'form':form1})
             else:
                 print(form.errors)
-                messages.info(request,'Enter correct username or password')
+                messages.warning(request,'Enter correct username or password')
                 return render(request,'login.html',{'form':form1})    
         return render(request,'login.html',{'form':form1}) 
 
@@ -58,7 +58,7 @@ def register(request):
             messages.success(request,'your account crated')
             return redirect('login')
         else:
-            messages.info(request,'Enter the valid data!')
+            messages.warning(request,'Enter the valid data!')
             return render(request,'register.html',{'form':form})     
     return render(request,'register.html',{'form':form})
 
@@ -77,7 +77,7 @@ def forgot_password(request):
             messages.success(request,'New password send in your email')
             return redirect('login')
         except:
-            messages.info(request,'Enter the valid email addres')
+            messages.warning(request,'Enter the valid email addres')
             return render(request,'forgot-password.html')         
     return render(request,'forgot-password.html')  
 
@@ -93,7 +93,7 @@ def change_password(request):
             messages.success(request,'your password update')
             return redirect('login')
         else:
-            messages.info(request,'enter the correct password')
+            messages.warning(request,'enter the correct password')
             return render(request,'change-password.html',{'form':p})   
     return render(request,'change-password.html',{'form':p}) 
 
@@ -107,7 +107,7 @@ def edit_profile(request):
             messages.success(request,'Your profile Update')
             return redirect('profile')
         else:
-            messages.info(request,'Enter the valid data')
+            messages.warning(request,'Enter the valid data')
             return render(request,'profile.html',{'form':form})
     return render(request,'profile.html',{'form':form})
         
@@ -180,7 +180,7 @@ def add_product(request):
             messages.success(request,'your product add successfully')
             return redirect('my-product')
         else:
-            messages.info(request,'Enter the correct detail')
+            messages.warning(request,'Enter the correct detail')
             return render(request,'seller/add-product.html',{'form':form})  
     return render(request,'seller/add-product.html',{'form':form})
 
@@ -202,7 +202,7 @@ def edit_product(request,pk):
             messages.success(request,'your product update successfully')
             return redirect('my-product')
         else:
-            messages.info(request,'Enter the valid details')
+            messages.warning(request,'Enter the valid details')
             return render(request,'seller/edit-product.html',{'form':form,'pro':pro})      
     return render(request,'seller/edit-product.html',{'form':form,'pro':pro})
 
@@ -285,21 +285,24 @@ def add_to_cart(request,pk):
     if request.method =="POST":
         form=AddcartForm(request.POST)
         q=request.POST['quantity']
-        if pro.quantity >= int(q): 
-            if form.is_valid():
-                f=form.save(commit=False)
-                f.user=request.user
-                f.product=pro
-                f.save()
-                messages.success(request,'product added cart')
-                return redirect('my-cart')
+        if int(q) > 0:
+            if pro.quantity >= int(q): 
+                if form.is_valid():
+                    f=form.save(commit=False)
+                    f.user=request.user
+                    f.product=pro
+                    f.save()
+                    messages.success(request,'product added cart')
+                    return redirect('my-cart')
+                else:
+                    messages.warning(request,'enter the valid data')
+                    return render(request,'view-product.html',{'pro':pro})
             else:
-                messages.info(request,'enter the valid data')
+                messages.warning(request,'your quantity in more then available quantity')  
                 return render(request,'view-product.html',{'pro':pro})
         else:
-            messages.info(request,'your quantity in more then available quantity')  
+            messages.warning(request,' enter the valid quantity')  
             return render(request,'view-product.html',{'pro':pro})
-
     return render(request,'view-product.html',{'pro':pro})
       
                 
@@ -325,18 +328,22 @@ def edit_to_cart(request,pk):
     if request.method =="POST":
         form=EditcartForm(request.POST,instance=cart)
         v=request.POST['quantity']
-        if cart.product.quantity >= int(v):
-            if form.is_valid():
-                form.save()
-                messages.success(request,'update your cart')
-                return redirect('my-cart')
+        if int(v) > 0:
+            if cart.product.quantity >= int(v):
+                if form.is_valid():
+                    form.save()
+                    messages.success(request,'update your cart')
+                    return redirect('my-cart')
+                else:
+                    messages.warning(request,'Enter the valid data')
+                    return redirect('my-cart') 
             else:
-                messages.info(request,'Enter the valid data')
-                return render(request,'buyer/edit-to-cart.html',{'form':form1,'pro':cart})    
-        else:
-            messages.info(request,'your quantity in more then available quantity')  
-            return render(request,'buyer/edit-to-cart.html',{'form':form1,'pro':cart})             
-    return render(request,'buyer/edit-to-cart.html',{'form':form1,'pro':cart})    
+                messages.warning(request,'your quantity in more then available quantity')  
+                return redirect('my-cart')    
+        messages.warning(request,'enter the valid quantity')  
+        return redirect('my-cart')    
+              
+    return render(request,'buyer/my-cart.html',{'form':form1,'pro':cart})    
 
 @login_required(login_url='/login/')
 def checkout(request):
@@ -360,7 +367,7 @@ def checkout(request):
                 c.product.save()
                 c.delete()
             else: 
-                messages.info(request,'enter the valid data')
+                messages.warning(request,'enter the valid data')
                 return render(request,'buyer/checkout.html',{'cart':cart,'form':form,'t':t})     
         messages.success(request,'product buy successfully ')
         return redirect('my-buy')     
@@ -388,10 +395,10 @@ def buy_now(request,pk):
                 messages.success(request,'product buy successfully ')
                 return redirect('my-buy')
             else:
-                messages.info(request,'enter the valid data')
+                messages.warning(request,'enter the valid data')
                 return render(request,'buyer/buy-now.html',{'form':form,'pro':pro})
         else:
-            messages.info(request,'your quantity in more then available quantity')  
+            messages.warning(request,'your quantity in more then available quantity')  
             return render(request,'buyer/buy-now.html',{'form':form,'pro':pro})          
     return render(request,'buyer/buy-now.html',{'form':form,'pro':pro})
 
@@ -403,10 +410,8 @@ def my_buy(request):
 def search_product(request):
     if request.method == "GET":
         search=request.GET.get('search')
-        if search:
-            pro=Product.objects.filter(product_name__icontains=search)
-            pro1=Product.objects.filter(category__icontains=search)
-            return render(request,'search.html',{'pro':pro,'pro':pro1})
+        pro=Product.objects.filter(product_name__icontains=search)
+        return render(request,'search.html',{'pro':pro})
         
         
 @login_required(login_url='/login/')                      

@@ -13,12 +13,18 @@
     <div class="row">
      
      <div class="col-sm-8">
+
      <div class="card">
       <div class="card-body">
+    {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+    {% endif %}
+
        <h3>My Cart</h3>
-       {% for msg in messages %}
-       <p style="color: red;">{{msg}}</p>
-       {% endfor %}
        {% for cart in cart %}
        <div class="row">
         <div class="col-sm-3 text-center align-self-center"><img src="{{cart.product.pic.url}}" alt="" srcset="" class="img-fluid img-thumbnail shadow-sm" height="150" width="150"> </div>
@@ -27,15 +33,24 @@
           <h5>{{cart.product.product_name}}</h5>
           <h5> RS {{cart.product.price}}/-</h5>
           <p class="mb-2 text-muted small">Description: {{cart.product.description}}</p>
-          <div class="my-3">
-           <label for="quantity">Quantity:</label>
-            <span id="quantity">{{cart.quantity}}</span>
-          </div> 
+          <form action="{% url 'edit-to-cart' cart.id %}" method="POST" class="cart-quantity">
+          {% csrf_token %}
+          <div class="quantity">
+            <label>Quantity</label>
+            <div class="cart-plus-minus">
+                <input class="cart-plus-minus-box" value="{{cart.quantity}}" name='quantity'>
+                <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
+                <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
+            </div>
+         </div> 
           <div class="d-flex justify-content-between">
-           <a href="{% url 'remove-to-cart' cart.id %}" class="btn btn-sm btn-secondary mr-3">Remove item </a>
-           <a href="{% url 'edit-to-cart' cart.id %}" class="btn btn-sm btn-secondary mr-3">Edit item</a>
+           <button type="submit" class="btn btn-sm btn-secondary mr-3">Submit</button>
+        </form>
+
+           <a href="{% url 'remove-to-cart' cart.id %}" class="btn btn-sm btn-secondary mr-3">Remove item</a>
            <p class="mb-0"><span><strong>Total cost:Rs. {{cart.total_cost}}</strong></span></p>
           </div>
+    
          </div>
         </div>
        </div>

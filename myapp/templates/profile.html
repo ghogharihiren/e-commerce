@@ -21,9 +21,13 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
-                {% for msg in messages %}
-                <p style="color: red;">{{msg}}</p>
-                {% endfor %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
                 <form method="POST">
                     {% csrf_token %}
                     <div class="login-form">

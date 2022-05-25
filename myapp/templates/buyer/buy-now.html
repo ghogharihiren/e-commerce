@@ -17,9 +17,13 @@
                     {% csrf_token %}
                     <div class="checkbox-form">
                         <h3>Billing Details</h3>
-                        {% for msg in messages %}
-                        <p style="color: red;">{{msg}}</p>
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
                         {% endfor %}
+                        {% endif %}
                         <div class="row">
                             <div class="col-md-12">
                             </div>

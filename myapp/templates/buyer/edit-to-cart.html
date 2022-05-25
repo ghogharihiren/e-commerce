@@ -28,9 +28,13 @@
             <div class="col-lg-7 col-md-6">
                 <div class="product-details-view-content pt-60">
                     <div class="product-info">
-                        {% for msg in messages %}
-                        <p style="color: red;">{{msg}}</p>
-                        {% endfor %}
+                        {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                            {% endif %}
                         <h2>product Name:{{pro.product.product_name}}</h2>
                         <span class="product-details-ref">Category:{{pro.product.category}}</span>
                         <div class="rating-box pt-20">

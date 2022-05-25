@@ -28,27 +28,40 @@
             <div class="col-lg-7 col-md-6">
                 <div class="product-details-view-content pt-60">
                     <div class="product-info">
-                        {% for msg in messages %}
-                        <p style="color: red;">{{msg}}</p>
+                        {% if messages %}
+                        {% for message in messages %}
+                          <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                          </div>
                         {% endfor %}
+                        {% endif %}
                         <h2>product Name:{{pro.product_name}}</h2>
-                        <span class="product-details-ref">Category:{{pro.category}}</span>
+                        <h4 class="product-details-ref">Category:{{pro.category}}</h4>
                         <div class="rating-box pt-20">
                         </div>
                         <div class="price-box pt-20">
                             <span class="new-price new-price-2">Price:Rs {{pro.price}}/-</span>
                         </div>
+                        {% if pro.quantity > 0 %}
                         <div class="product-desc">
-                            <p>
+                            <h2>
                                 <span>Avalible_Quantity: {{pro.quantity}}
                                 </span>
-                            </p>
+                            </h2>
                         </div>
+                        {% else %}
                         <div class="product-desc">
-                            <p>
+                            <h2>
+                                <span>Out of stock
+                                </span>
+                            </h2>
+                        </div>
+                        {% endif %}
+                        <div class="product-desc">
+                            <h2>
                                 <span>{{pro.description}}
                                 </span>
-                            </p>
+                            </h2>
                         </div>
                         <div class="product-variants">
                             <div class="produt-variants-size">
@@ -56,6 +69,7 @@
                                 {{pro.seller.first_name}} {{pro.seller.last_name}}
                             </div>
                         </div>
+                        {% if pro.quantity > 0%}
                         <div class="single-add-to-cart">
                             <form action="{% url 'add-to-cart' pro.id%}" method="POST" class="cart-quantity">
                                 {% csrf_token %}
@@ -79,6 +93,7 @@
                         <div class="product-additional-info pt-25">
                             <a href="{% url 'buy-now' pro.id%}" class="btn btn-primary">Buy-Now</a>
                         </div>
+                        {% endif %}
                         <div class="block-reassurance">
                             <ul>
                                 <li>

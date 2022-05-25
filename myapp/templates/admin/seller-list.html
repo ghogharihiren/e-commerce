@@ -192,9 +192,12 @@ $(document).ready(function(){
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-5">
-                        {% for msg in messages %}
-                        <p style="color: red;">{{msg}}</p>
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
                         {% endfor %}
+                        {% endif %}
                         <h2>Seller <b>List</b></h2>
                     </div>
                 </div>

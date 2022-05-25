@@ -13,8 +13,12 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
+                {% if pro %}
                 <form action="#">
                     <div class="table-content table-responsive">
+                        {% for msg in messages %}
+                        <p style="color: red;">{{msg}}</p>
+                        {% endfor %}
                         <table class="table">
                             <thead>
                                 <tr>
@@ -43,6 +47,9 @@
                         </table>
                     </div>
                 </form>
+                {% else %}
+                <h2> Add product for sell </h2>
+                {% endif %}
             </div>
         </div>
     </div>

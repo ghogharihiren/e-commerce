@@ -10,11 +10,16 @@
 {% block content %}
 <div class="container my-5">
     <div class="row">
-     
+
+     {% if buy%}
      <div class="col-sm-8">
      <div class="card">
       <div class="card-body">
+       
        <h3>My Buy</h3>
+       {% for msg in messages %}
+       <p style="color: red;">{{msg}}</p>
+       {% endfor %}
         {% for buy in buy %}
        <div class="row">
 
@@ -22,9 +27,6 @@
         <div class="col-sm-3 text-center align-self-center"><img src="{{buy.product.pic.url}}" alt="" srcset="" class="img-fluid img-thumbnail shadow-sm" height="150" width="150"></div>
         <div class="col-sm-9">
          <div>
-          {% for msg in messages %}
-          <p style="color: red;">{{msg}}</p>
-          {% endfor %}
           <h5>{{buy.product.product_name}}</h5>
           <h5>Status: {{buy.status}}</h5>
           <div class="my-3">
@@ -38,10 +40,15 @@
          </div>
         </div>
        </div>
+       {% if buy.status == 'pending' or buy.status == 'packing'%}
        <a href="{% url 'edit-ordered' buy.id %}" class="btn btn-primary">Edit</a>
        <a href="{% url 'cancel-ordered' buy.id %}" class="btn btn-primary">Cancel</a>
+       {% endif %}
        <hr class="text-muted">
        {% endfor %}
+       {% else %}
+       <h2>Please buy product</h2>
+       {% endif%}
       </div>
       </div>
      </div>

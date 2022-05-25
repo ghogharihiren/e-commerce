@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-<title>seller-list</title>
+<title>Buyer-list</title>
 {% endblock %}
 
 
@@ -195,7 +195,7 @@ $(document).ready(function(){
                         {% for msg in messages %}
                         <p style="color: red;">{{msg}}</p>
                         {% endfor %}
-                        <h2>Seller <b>List</b></h2>
+                        <h2>Buyer<b>List</b></h2>
                     </div>
                 </div>
             </div>
@@ -206,8 +206,6 @@ $(document).ready(function(){
                         <th>Name</th>						
                         <th>UserName</th>
                         <th>Email</th>
-                        <th>Role</th>
-                        <th>Verification</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -218,13 +216,9 @@ $(document).ready(function(){
                         <td><a href="#">{{user.first_name}} {{user.last_name}}</a></td>
                         <td>{{user.username}}</td>                        
                         <td>{{user.email}}</td>
-                        <td><span></span>{{user.role}}</td>
-                        <td><span></span>{{user.verification}}</td>
-                        {% if user.verification == False %}
                         <td>
-                            <a href="{% url 'verification' user.id %}" class="nav-item nav-link active">Verify</a>
+                            <a href="{% url 'delete-user' user.id %}" class="nav-item nav-link active">Delete</a>
                         </td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>

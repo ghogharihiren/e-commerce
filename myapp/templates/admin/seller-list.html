@@ -208,7 +208,8 @@ $(document).ready(function(){
                         <th>Email</th>
                         <th>Role</th>
                         <th>Verification</th>
-                        <th>Action</th>
+                        <th>delete</th>
+                        <th>verifay</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -220,11 +221,15 @@ $(document).ready(function(){
                         <td>{{user.email}}</td>
                         <td><span></span>{{user.role}}</td>
                         <td><span></span>{{user.verification}}</td>
+                        <td>
+                            <a href="{% url 'delete-user' user.id %}" class="nav-item nav-link active">Delete</a>
+                        </td> 
                         {% if user.verification == False %}
                         <td>
                             <a href="{% url 'verification' user.id %}" class="nav-item nav-link active">Verify</a>
                         </td>
                         {% endif %}
+                          
                     </tr>
                 {% endfor %}
                 </tbody>

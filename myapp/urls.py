@@ -9,6 +9,7 @@ urlpatterns = [
     path('profile/',views.edit_profile,name='profile'),
     path('forgot-password/',views.forgot_password,name='forgot-password'),
     path('change-password/',views.change_password,name='change-password'),
+    path('delete-user/<int:pk>',views.delete_user,name='delete-user'),
 #-----------------------------------------Admin------------------------------------------------    
     path('admin-index/',views.admin_index,name='admin-index'),
     path('seller-list/',views.seller_list,name='seller-list'),

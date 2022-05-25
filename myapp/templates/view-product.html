@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-<title>Home</title>
+<title>product-detail</title>
 {% endblock %}
 
 
@@ -59,6 +59,11 @@
                         <div class="single-add-to-cart">
                             <form action="{% url 'add-to-cart' pro.id%}" method="POST" class="cart-quantity">
                                 {% csrf_token %}
+                                {% if cart %}
+                                <div class="product-additional-info pt-25">
+                                    <a href="{% url 'my-cart' %}" class="btn btn-primary">Show-cart</a>
+                                </div>
+                                {% else %}
                                 <div class="quantity">
                                     <label>Quantity</label>
                                     <div class="cart-plus-minus">
@@ -68,6 +73,7 @@
                                     </div>
                                 </div>
                                 <button class="add-to-cart" type="submit">Add to cart</button>
+                                {% endif %}
                             </form>
                         </div>
                         <div class="product-additional-info pt-25">

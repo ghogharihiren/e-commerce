@@ -9,13 +9,12 @@ import random
 from django.contrib.auth.hashers import make_password
 
 def index(request):
-    pro=Product.objects.all()
+    pro=Product.objects.all()[::-1]
     user=User.objects.all()[::-1]
     if request.user.is_authenticated:
-        pro1=Buyproduct.objects.all()
         if request.user.role == 'seller':
             if request.user.verification == True:
-                return render(request,'seller/seller-index.html',{'pro':pro1})
+                return redirect('seller-index')
             else:
                 messages.info(request,'Your account not verifay')
                 logout(request)
@@ -112,8 +111,6 @@ def edit_profile(request):
             return render(request,'profile.html',{'form':form})
     return render(request,'profile.html',{'form':form})
         
-
-
 @login_required(login_url='/login/')
 def user_logout(request):
     logout(request)
@@ -146,17 +143,30 @@ def verification(request,pk):
        return redirect('seller-list')
     else:
         return redirect('buyer-list')
+    
+@login_required(login_url='/login/')
+def delete_user(request,pk):
+    user=User.objects.get(id=pk)
+    user.delete()
+    if user.role == 'seller':
+        return redirect('seller-list')    
+    else:
+        return redirect('buyer-list')
 #----------------------------------------------seller-----------------------------------------
 
 @login_required(login_url='/login/')
 def my_product(request):
-    pro=Product.objects.filter(seller=request.user)
+    pro=Product.objects.filter(seller=request.user)[::-1]
     return render(request,'seller/my-product.html',{'pro':pro})
 
 @login_required(login_url='/login/')
 def seller_index(request):
+    l=[]
     pro=Buyproduct.objects.all()
-    return render(request,'seller/seller-index.html',{'pro':pro})
+    for i in pro:
+        if i.product.seller == request.user:
+            l.append(i)      
+    return render(request,'seller/seller-index.html',{'pro':l})
 
 @login_required(login_url='/login/')
 def add_product(request):
@@ -168,7 +178,7 @@ def add_product(request):
             h.seller=request.user
             h.save()
             messages.success(request,'your product add successfully')
-            return redirect('seller-index')
+            return redirect('my-product')
         else:
             messages.info(request,'Enter the correct detail')
             return render(request,'seller/add-product.html',{'form':form})  
@@ -179,7 +189,7 @@ def add_product(request):
 def delete_product(request,pk):
     pro=Product.objects.get(id=pk)
     pro.delete()
-    return redirect('seller-index')
+    return redirect('my-product')
 
 @login_required(login_url='/login/')
 def edit_product(request,pk):
@@ -190,7 +200,7 @@ def edit_product(request,pk):
         if form1.is_valid():
             form1.save()
             messages.success(request,'your product update successfully')
-            return redirect('seller-index')
+            return redirect('my-product')
         else:
             messages.info(request,'Enter the valid details')
             return render(request,'seller/edit-product.html',{'form':form,'pro':pro})      
@@ -234,7 +244,13 @@ def odered_complate(request,pk):
 
 def view_product(request,pk):
     pro=Product.objects.get(id=pk)
-    return render(request,'view-product.html',{'pro':pro})
+    if request.user.is_authenticated:
+        cart=False
+        cart=Mycart.objects.filter(product_id=pro,user=request.user).exists()
+        return render(request,'view-product.html',{'pro':pro,'cart':cart})
+    else:
+        return render(request,'view-product.html',{'pro':pro})
+        
 
 def category_list(request,id):
     if id == '1':
@@ -266,30 +282,28 @@ def category_list(request,id):
 def add_to_cart(request,pk):
     pro=Product.objects.get(id=pk)
     my=Mycart.objects.filter(user=request.user)
-    if pro not in my:
-        if request.method =="POST":
-            form=AddcartForm(request.POST)
-            q=request.POST['quantity']
-            if pro.quantity >= int(q): 
-                if form.is_valid():
-                    f=form.save(commit=False)
-                    f.user=request.user
-                    f.product=pro
-                    f.save()
-                    messages.success(request,'product added cart')
-                    return redirect('my-cart')
-                else:
-                    messages.info(request,'enter the valid data')
-                    return render(request,'view-product.html',{'pro':pro})
+    if request.method =="POST":
+        form=AddcartForm(request.POST)
+        q=request.POST['quantity']
+        if pro.quantity >= int(q): 
+            if form.is_valid():
+                f=form.save(commit=False)
+                f.user=request.user
+                f.product=pro
+                f.save()
+                messages.success(request,'product added cart')
+                return redirect('my-cart')
             else:
-                messages.info(request,'your quantity in more then available quantity')  
+                messages.info(request,'enter the valid data')
                 return render(request,'view-product.html',{'pro':pro})
-        return render(request,'view-product.html',{'pro':pro})
-    else:
-        messages.info(request,'product alreday in cart')
-        return render(request,'view-product.html',{'pro':pro})    
+        else:
+            messages.info(request,'your quantity in more then available quantity')  
+            return render(request,'view-product.html',{'pro':pro})
+
+    return render(request,'view-product.html',{'pro':pro})
+      
                 
-@login_required(login_url='/login/')                
+@login_required(login_url='/login/')              
 def my_cart(request):
     cart=Mycart.objects.filter(user=request.user)[::-1]
     amount=0.0
@@ -394,6 +408,8 @@ def search_product(request):
             pro1=Product.objects.filter(category__icontains=search)
             return render(request,'search.html',{'pro':pro,'pro':pro1})
         
+        
+@login_required(login_url='/login/')                      
 def cancel_ordered(request,pk):
     pro=Buyproduct.objects.get(id=pk)
     pro.product.quantity += pro.quantity
@@ -401,26 +417,24 @@ def cancel_ordered(request,pk):
     pro.delete() 
     return redirect('my-buy')   
 
+
+@login_required(login_url='/login/')              
 def edit_ordered(request,pk):
     pro=Buyproduct.objects.get(id=pk)
-    if pro.status == 'pending'  or pro.status == 'packing':
-        form=EditduyproductForm(instance=pro)
-        if request.method=="POST":
-            pro.product.quantity += pro.quantity
-            pro.product.save()
-            form1=EditduyproductForm(request.POST,instance=pro)
-            a=request.POST['quantity']
-            amount=pro.product.price * int(a)
-            if form1.is_valid():
-                v=form1.save(commit=False)
-                v.total_amount=amount
-                v.product.quantity -= int(a)
-                v.product.save()
-                v.save()
-                messages.success(request,'Your ordered update')
-                return redirect('my-buy')
-        else:
-            return render(request,'buyer/edit-ordered.html',{'form':form,'pro':pro})    
+    form=EditduyproductForm(instance=pro)
+    if request.method=="POST":
+        pro.product.quantity += pro.quantity
+        pro.product.save()
+        form1=EditduyproductForm(request.POST,instance=pro)
+        a=request.POST['quantity']
+        amount=pro.product.price * int(a)
+        if form1.is_valid():
+            v=form1.save(commit=False)
+            v.total_amount=amount
+            v.product.quantity -= int(a)
+            v.product.save()
+            v.save()
+            messages.success(request,'Your ordered update')
+            return redirect('my-buy')
     else:
-        messages.info(request,'sorry your ordered dispatch')
-        return redirect('my-buy')
+        return render(request,'buyer/edit-ordered.html',{'form':form,'pro':pro})    

@@ -192,12 +192,14 @@ $(document).ready(function(){
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-5">
+                        {% if messages %}
                         {% for message in messages %}
                         <div class="alert alert-{{ message.tags }}">
                             {{ message }}
                         </div>
                         {% endfor %}
                         {% endif %}
+                        
                         <h2>User<b>List</b></h2>
                     </div>
                 </div>
